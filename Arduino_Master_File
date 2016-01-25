@@ -46,13 +46,6 @@ long time = 0;         // the last time the output pin was toggled
 long debounce = 200;   // the debounce time, increase if the output flickers
 
 
-
-
-
-/*
-Adafruit Arduino - Lesson 6. Inputs
-*/
-
 #include <Servo.h>
   
   Servo myservo;  // create servo object to control a servo
@@ -64,7 +57,7 @@ Adafruit Arduino - Lesson 6. Inputs
   const int SG90 = 9; //Analog pin A3 connected to myservo
   int pos = 0;    // variable to store the servo position
 
-*PROJECTOR: ON/OFF ONE BUTTON
+--PROJECTOR: ON/OFF ONE BUTTON--
 
 /*Taken from http://danthompsonsblog.blogspot.ca/2011/12/arduino-push-button-onoff-example.html
 /* Debounce
@@ -87,9 +80,7 @@ http://www.arduino.cc/en/Tutorial/Debounce */
 // the following variables are long's because the time, measured in miliseconds, // will quickly become a bigger number than can be stored in an int. long lastDebounceTime = 0; // the last time the output pin was toggled long debounceDelay = 50; // the debounce time; increase if the output flickers
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Beginning of declaring variables for sound code
 
 int ledPin = 5; //the led wire is in pin 5 on the arduino
 int buttonON = 9; //the wire for the on button is connected to pin 9 on the arduino
@@ -108,10 +99,6 @@ bool x; //boolean labelled as x
 bool y; //boolean labelled as y
 
 byte leds = 0; //
-
-// End of declaring variables for sound code
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 void setup() 
 {
@@ -136,10 +123,8 @@ pinMode(SW_pin, INPUT);
    digitalWrite(SW_pin, HIGH);
    Serial.begin(115200);
    myservo.attach(9);  // attaches the servo on pin 9 to the servo object 
-   
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Beginning of void setup for sound code (main code)
+
 
   pinMode(ledPin, OUTPUT); // the led is the output
   pinMode(buttonON, INPUT_PULLUP); // the first button to turn on the circuit is the input
@@ -149,14 +134,8 @@ pinMode(SW_pin, INPUT);
   y = false;  //boolean set up as false 
 }
  
-// End of void setup for sound code
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
 void loop() 
 {
-  // Beginning of void loop for sound code 
-  
   if ((digitalRead(buttonON) == LOW) &&  (x == false)) // if the button is off on pin number 9         
   {for (int i = 0; i < numTones; i++) // plays 1 through 2: plays 1 and adds a value (1) to play 2
   {
@@ -205,12 +184,6 @@ void loop()
      y = true; //boolean y becomes true
    }
 }
-
-// End of void loop for sound code (main code)
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
   Serial.print("Switch: ");             //the name switch appears on the serial monitor
     Serial.print(digitalRead(SW_pin));    //shows the switch on the serial monitor
@@ -297,5 +270,36 @@ reading = digitalRead(inPin);
 
   previous = reading;
 
+}
 
+
+--Projector Screen (Stepper Motor)--
+
+#include <Stepper.h> //Uses the already downloaded stepper library
+ 
+int in1Pin = 12; //The first pin in the stepper motor
+int in2Pin = 11; //The second pin in the stepper motor
+int in3Pin = 10; //The third pin in the stepper motor
+int in4Pin = 9; //The fourth pin in the stepper motor
+ 
+Stepper motor(512, in1Pin, in2Pin, in3Pin, in4Pin); //Shows what pins are connected to the motor controller 
+ 
+void setup()
+{
+  pinMode(in1Pin, OUTPUT);
+  pinMode(in2Pin, OUTPUT);
+  pinMode(in3Pin, OUTPUT);
+  pinMode(in4Pin, OUTPUT);
+ 
+  Serial.begin(9600);
+  motor.setSpeed(20); //Determines the motor speed
+}
+ 
+void loop()
+{
+  if (Serial.available()) //If serial monitor is open
+  {
+    int steps = Serial.parseInt(); //Number inputed into the serial monitor
+    motor.step(steps); //Amount of steps
+  }
 }
